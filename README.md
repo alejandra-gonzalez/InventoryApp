@@ -11,7 +11,7 @@ Check lists are derived from the project rubrics created by Udacity.
 - [x] One inner class for each table in the contract class
 - [x] Constants for the Product Name, Price, Quantity, Supplier Name, and Supplier Phone Number in the contract class
 
-- [ ] A subclass of SQLiteOpenHelper that overrides onCreate() and onUpgrade()
+- [x] A subclass of SQLiteOpenHelper that overrides onCreate() and onUpgrade()
 
 - [ ] Single insert method that adds Product Name, Price, Quantity, Supplier Name, Supplier Phone Number
 - [ ] At least 2 different datatypes

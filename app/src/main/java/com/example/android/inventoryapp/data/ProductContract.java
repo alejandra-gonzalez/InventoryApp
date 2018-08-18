@@ -2,7 +2,7 @@ package com.example.android.inventoryapp.data;
 
 import android.provider.BaseColumns;
 
-public class ProductContract {
+public final class ProductContract {
 
     /**
      * Suppress the constructor, since this class should not be instantiated.

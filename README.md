@@ -7,9 +7,9 @@ Check lists are derived from the project rubrics created by Udacity.
 # Stage 1 Check List
 - [ ] A main activity that has methods to read data, a Contract Java class, and a DbHelper Java class
 
-- [ ] A contract class that defines name of table and constants
-- [ ] One inner class for each table in the contract class
-- [ ] Constants for the Product Name, Price, Quantity, Supplier Name, and Supplier Phone Number in the contract class
+- [x] A contract class that defines name of table and constants
+- [x] One inner class for each table in the contract class
+- [x] Constants for the Product Name, Price, Quantity, Supplier Name, and Supplier Phone Number in the contract class
 
 - [ ] A subclass of SQLiteOpenHelper that overrides onCreate() and onUpgrade()
 

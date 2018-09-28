@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
 import com.example.android.inventoryapp.data.ProductDbHelper;
@@ -32,16 +33,18 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = productDbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, "Krill Oil Capsules");
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, getString(R.string.sample_product_name));
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, 12);
         values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, 25);
-        values.put(ProductEntry.COLUMN_SUPPLIER_NAME, "BioOptimal");
-        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER, "(123) 456-7890");
+        values.put(ProductEntry.COLUMN_SUPPLIER_NAME, getString(R.string.sample_supplier_name));
+        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.sample_supplier_number));
 
         long newRowId = db.insert(ProductEntry.TABLE_NAME, null, values);
 
         if (newRowId != -1) {
             displayProductData();
+        } else {
+            Toast.makeText(getApplicationContext(),getString(R.string.display_error_message),Toast.LENGTH_SHORT).show();
         }
     }
 

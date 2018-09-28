@@ -24,6 +24,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        //Don't forget to add ID as an autoincrementing primary key and upgrade the database.
         String CREATE_INVENTORY_TABLE = "CREATE TABLE " + ProductEntry.TABLE_NAME + "(" +
                 ProductEntry.COLUMN_PRODUCT_NAME + " TEXT PRIMARY KEY, " +
                 ProductEntry.COLUMN_PRODUCT_PRICE + " INTEGER," +
@@ -35,7 +36,9 @@ public class ProductDbHelper extends SQLiteOpenHelper {
 
     /**
      * This method updates the database when the database version number changes.
-     * NOTE: I don't agree with dropping and re-creating the table, but I'm not sure what else to put here.
+     * TODO: FIX THIS METHOD.
+     * NOTE: Since I'll be changing the schema to have an ID column for a primary key,
+     * add that column and make it the primary key.
      */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {

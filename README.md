@@ -18,3 +18,20 @@ Check lists are derived from the project rubrics created by Udacity.
 
 - [x] Single method that uses a Cursor from the database to perform a query on the table to retrieve at least one column of data
 - [x] Said method should close the Cursor after reading from it
+
+# Stage 2 Check List
+
+- [ ] The following features: Add Inventory, View Product Details, Edit Product Details, List of All Inventory
+- [ ] Use of Navigation Drawer, View Pager, Up/Back Navigation, or Intents to navigate between activities or fragments
+
+- [ ] Main Activity contains List of All Inventory
+- [ ] List item contains product name, price, quantity, sale button to reduce product quantity by one
+
+- [ ] Product Details layout displays product name, price, quanitity, supplier name, and supplier phone number stored in database
+- [ ] Product Details layout contains buttons to increase and decrease available quantity
+- [ ] Product Details layout contains button to order from supplier. This button should have an intent to a phone app to dial the supplier phone number from the database
+
+- [ ] Empty view should be a TextView with instructions on how to add items to the database
+- [ ] Add Product Button
+
+- [ ] Data validation to make sure no null (or invalid) values are accepted while adding or updating inventory

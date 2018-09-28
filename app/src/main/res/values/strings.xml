@@ -2,4 +2,8 @@
     <string name="app_name">Inventory App</string>
     <string name="insert_sample_data">Insert Sample Data</string>
     <string name="product_inventory">Product Inventory</string>
+    <string name="sample_product_name">Krill Oil Capsules</string>
+    <string name="sample_supplier_name">BioOptimal</string>
+    <string name="sample_supplier_number">(123) 456-7890</string>
+    <string name="display_error_message">Error: Product already in database.</string>
 </resources>

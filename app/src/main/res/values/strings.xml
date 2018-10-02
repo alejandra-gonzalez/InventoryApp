@@ -6,4 +6,7 @@
     <string name="sample_supplier_name">BioOptimal</string>
     <string name="sample_supplier_number">(123) 456-7890</string>
     <string name="display_error_message">Error: Product already in database.</string>
+    <string name="price_label">Price: </string>
+    <string name="quantity_label">Quantity: </string>
+    <string name="sale_button_text">Sell</string>
 </resources>

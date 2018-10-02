@@ -24,7 +24,7 @@ Check lists are derived from the project rubrics created by Udacity.
 - [ ] The following features: Add Inventory, View Product Details, Edit Product Details, List of All Inventory
 - [ ] Use of Navigation Drawer, View Pager, Up/Back Navigation, or Intents to navigate between activities or fragments
 
-- [ ] Main Activity contains List of All Inventory
+- [x] Main Activity contains List of All Inventory
 - [ ] List item contains product name, price, quantity, sale button to reduce product quantity by one
 
 - [ ] Product Details layout displays product name, price, quanitity, supplier name, and supplier phone number stored in database

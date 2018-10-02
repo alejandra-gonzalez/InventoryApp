@@ -3,16 +3,25 @@ package com.example.android.inventoryapp;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
 import com.example.android.inventoryapp.data.ProductDbHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    private static final int PRODUCT_LIST_LOADER = 0;
+    private ProductCursorAdapter productCursorAdapter;
 
     private ProductDbHelper productDbHelper;
 
@@ -21,9 +30,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ListView productList = findViewById(R.id.product_list);
+        productCursorAdapter = new ProductCursorAdapter(this, null);
+        productList.setAdapter(productCursorAdapter);
+
         productDbHelper = new ProductDbHelper(this);
 
-        displayProductData();
+        getSupportLoaderManager().initLoader(PRODUCT_LIST_LOADER, null, this);
     }
 
     /**
@@ -41,53 +54,30 @@ public class MainActivity extends AppCompatActivity {
 
         long newRowId = db.insert(ProductEntry.TABLE_NAME, null, values);
 
-        if (newRowId != -1) {
-            displayProductData();
-        } else {
-            Toast.makeText(getApplicationContext(),getString(R.string.display_error_message),Toast.LENGTH_SHORT).show();
+        if (newRowId == -1) {
+            Toast.makeText(getApplicationContext(),getString(R.string.display_error_message),
+                    Toast.LENGTH_SHORT).show();
         }
+
+        productCursorAdapter.notifyDataSetChanged();
     }
 
-    /**
-     * Displays all columns and rows in the database.
-     */
-    private void displayProductData(){
-        SQLiteDatabase db = productDbHelper.getReadableDatabase();
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int loaderID, Bundle bundle) {
+        String[] projection = {ProductEntry._ID, ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_PRICE, ProductEntry.COLUMN_PRODUCT_QUANTITY};
+        return new CursorLoader(this, ProductEntry.CONTENT_URI, projection, null,
+                null, null);
+    }
 
-        Cursor cursor = db.query(ProductEntry.TABLE_NAME, null, null,
-                null, null, null, null);
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        productCursorAdapter.swapCursor(cursor);
+    }
 
-        TextView displayView = findViewById(R.id.product_data);
-
-        String columnsHeader = ProductEntry.COLUMN_PRODUCT_NAME + " | " +
-                ProductEntry.COLUMN_PRODUCT_PRICE + " | " +
-                ProductEntry.COLUMN_PRODUCT_QUANTITY + " | " +
-                ProductEntry.COLUMN_SUPPLIER_NAME + " | " +
-                ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n";
-
-        if (!displayView.getText().toString().contains(columnsHeader)){
-            displayView.append(columnsHeader);
-        }
-
-        try {
-            int productNameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
-            int productPriceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
-            int productQuantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_NAME);
-            int supplierNumberColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-
-            while (cursor.moveToNext()) {
-                String currentProductName = cursor.getString(productNameColumnIndex);
-                int currentProductPrice = cursor.getInt(productPriceColumnIndex);
-                int currentProductQuantity = cursor.getInt(productQuantityColumnIndex);
-                String currentSupplierName = cursor.getString(supplierNameColumnIndex);
-                String currentSupplierNumber = cursor.getString(supplierNumberColumnIndex);
-
-                displayView.append(("\n" + currentProductName + " | " + currentProductPrice + " | " +
-                        currentProductQuantity + " | " + currentSupplierName + " | " + currentSupplierNumber));
-            }
-        } finally {
-            cursor.close();
-        }
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        productCursorAdapter.swapCursor(null);
     }
 }

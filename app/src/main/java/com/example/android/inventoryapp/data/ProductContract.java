@@ -1,18 +1,26 @@
 package com.example.android.inventoryapp.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class ProductContract {
 
+    public static final String CONTENT_AUTHORITY = "com.example.android.inventory";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    public static final String PATH_INVENTORY = "inventory";
+
     /**
      * Suppress the constructor, since this class should not be instantiated.
      */
-    private ProductContract(){}
+    private ProductContract() {
+    }
 
     /**
      * Inner class for Inventory table.
      */
     public static final class ProductEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_INVENTORY);
+
         public static final String TABLE_NAME = "inventory";
 
         public static final String _ID = BaseColumns._ID;

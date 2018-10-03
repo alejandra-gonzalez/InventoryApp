@@ -7,13 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:onClick="insertProductData"
-        android:text="@string/insert_sample_data" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

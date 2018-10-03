@@ -2,28 +2,22 @@ package com.example.android.inventoryapp;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
-import com.example.android.inventoryapp.data.ProductDbHelper;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int PRODUCT_LIST_LOADER = 0;
     private ProductCursorAdapter productCursorAdapter;
-
-    private ProductDbHelper productDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +28,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         productCursorAdapter = new ProductCursorAdapter(this, null);
         productList.setAdapter(productCursorAdapter);
 
-        productDbHelper = new ProductDbHelper(this);
-
         getSupportLoaderManager().initLoader(PRODUCT_LIST_LOADER, null, this);
     }
 
     /**
      * Inserts a row of fake data.
      */
-    public void insertProductData(View v){
-        SQLiteDatabase db = productDbHelper.getWritableDatabase();
-
+    public void insertProductData(){
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, getString(R.string.sample_product_name));
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, 12);
@@ -52,16 +42,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, getString(R.string.sample_supplier_name));
         values.put(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER, getString(R.string.sample_supplier_number));
 
-        long newRowId = db.insert(ProductEntry.TABLE_NAME, null, values);
-
-        if (newRowId == -1) {
-            Toast.makeText(getApplicationContext(),getString(R.string.display_error_message),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        productCursorAdapter.notifyDataSetChanged();
+        getContentResolver().insert(ProductEntry.CONTENT_URI, values);
     }
 
+    /**
+     * Creates the loader if it does not exist already.
+     */
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int loaderID, Bundle bundle) {
@@ -71,13 +57,42 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 null, null);
     }
 
+    /**
+     * Uses the Cursor from the CursorLoader once the loader finishes its work.
+     */
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         productCursorAdapter.swapCursor(cursor);
     }
 
+    /**
+     * Resets the CursorLoader.
+     */
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         productCursorAdapter.swapCursor(null);
+    }
+
+    /**
+     * Inflates the menu options from the res/menu/menu_main_activity.xml file
+     * and adds them to the app bar.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+        return true;
+    }
+
+    /**
+     * Performs an action based on what was selected from the app bar menu.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_insert_dummy_data:
+                insertProductData();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

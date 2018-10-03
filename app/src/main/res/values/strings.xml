@@ -9,4 +9,5 @@
     <string name="price_label">Price: </string>
     <string name="quantity_label">Quantity: </string>
     <string name="sale_button_text">Sell</string>
+    <string name="insert_dummy_data">Insert Dummy Data</string>
 </resources>

@@ -32,6 +32,6 @@ Check lists are derived from the project rubrics created by Udacity.
 - [ ] Product Details layout contains button to order from supplier. This button should have an intent to a phone app to dial the supplier phone number from the database
 
 - [ ] Empty view should be a TextView with instructions on how to add items to the database
-- [ ] Add Product Button
+- [x] Add Product Button
 
 - [ ] Data validation to make sure no null (or invalid) values are accepted while adding or updating inventory

@@ -1,6 +1,7 @@
 package com.example.android.inventoryapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
@@ -91,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         switch (item.getItemId()) {
             case R.id.action_insert_dummy_data:
                 insertProductData();
+                return true;
+            case R.id.action_insert_new_product:
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);

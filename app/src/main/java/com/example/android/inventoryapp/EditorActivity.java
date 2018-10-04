@@ -1,7 +1,13 @@
 package com.example.android.inventoryapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,7 +17,7 @@ import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private EditText getProductName;
     private EditText getProductPrice;
@@ -19,6 +25,8 @@ public class EditorActivity extends AppCompatActivity {
     private EditText getSupplierName;
     private EditText getSupplierNumber;
 
+    private static final int EDIT_PRODUCT_LOADER = 1;
+    private Uri currentProductUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +38,19 @@ public class EditorActivity extends AppCompatActivity {
         getProductQuantity = findViewById(R.id.product_quantity);
         getSupplierName = findViewById(R.id.supplier_name);
         getSupplierNumber = findViewById(R.id.supplier_phone_number);
+
+        Intent intent = getIntent();
+        currentProductUri = intent.getData();
+
+        if (currentProductUri == null) {
+            setTitle(R.string.activity_title_add_new_product);
+            // Invalidate the options menu, so the "Delete" menu option can be hidden.
+            // (It doesn't make sense to delete a pet that hasn't been created yet.)
+            invalidateOptionsMenu();
+        } else {
+            setTitle(R.string.activity_title_edit_product);
+            getSupportLoaderManager().initLoader(EDIT_PRODUCT_LOADER, null, this);
+        }
     }
 
     /**
@@ -87,5 +108,44 @@ public class EditorActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.saving_product_success, Toast.LENGTH_SHORT).show();
             finish();
         }
+    }
+
+    /**
+     * Creates the loader to show product details if it was not created already.
+     */
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, currentProductUri, null, null,
+                null, null);
+    }
+
+    /**
+     * After the loader is finished, bind current product data to its corresponding EditText.
+     */
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+        if (data == null || data.getCount() < 1){
+            return;
+        }
+
+        data.moveToFirst();
+        getProductName.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME)));
+        getProductPrice.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE)));
+        getProductQuantity.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY)));
+        getSupplierName.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_NAME)));
+        getSupplierNumber.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER)));
+    }
+
+    /**
+     * Reset the data bound to the EditTexts if the loader is reset.
+     */
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        getProductName.setText("");
+        getProductPrice.setText("");
+        getProductQuantity.setText("");
+        getSupplierName.setText("");
+        getSupplierNumber.setText("");
     }
 }

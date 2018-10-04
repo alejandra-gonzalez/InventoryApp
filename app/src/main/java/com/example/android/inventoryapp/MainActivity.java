@@ -1,16 +1,21 @@
 package com.example.android.inventoryapp;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
@@ -28,6 +33,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ListView productList = findViewById(R.id.product_list);
         productCursorAdapter = new ProductCursorAdapter(this, null);
         productList.setAdapter(productCursorAdapter);
+
+        productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, l);
+                intent.setData(currentProductUri);
+                Log.i("MAINACTIVITY", "URI BEING PASSED = " + l);
+                startActivity(intent);
+            }
+        });
 
         getSupportLoaderManager().initLoader(PRODUCT_LIST_LOADER, null, this);
     }

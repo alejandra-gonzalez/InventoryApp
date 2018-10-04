@@ -23,4 +23,6 @@
     <string name="no_supplier_number">Supplier phone number is required</string>
     <string name="saving_product_error">Error with saving product</string>
     <string name="saving_product_success">Successfully saved product</string>
+    <string name="activity_title_add_new_product">Add New Product</string>
+    <string name="activity_title_edit_product">Edit Product</string>
 </resources>

@@ -103,7 +103,7 @@ public class ProductProvider extends ContentProvider {
     }
 
     /**
-     * Checks that all required data is present and not null before
+     * Checks that all required data not null before
      * inserting a product into the database with the given content values.
      * Returns the URI for the product inserted into the database.
      */
@@ -115,12 +115,12 @@ public class ProductProvider extends ContentProvider {
 
         int product_price = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_PRICE);
         if (product_price < 0) {
-            throw new IllegalArgumentException("Product requires a price.");
+            throw new IllegalArgumentException("Product requires a valid price.");
         }
 
         int product_quantity = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
         if (product_quantity < 0) {
-            throw new IllegalArgumentException("Product requires a quantity.");
+            throw new IllegalArgumentException("Product requires a valid quantity.");
         }
 
         String supplier_name = values.getAsString(ProductEntry.COLUMN_SUPPLIER_NAME);
@@ -146,11 +146,77 @@ public class ProductProvider extends ContentProvider {
     }
 
     /**
-     * Updates the data at the given URI using the new ContentValues. Returns the number of rows affected
+     * Public method to update the data at the given URI using the new ContentValues.
+     * Returns the number of rows affected
      */
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String
+            selection, @Nullable String[] selectionArgs) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case INVENTORY:
+                return updateProduct(uri, contentValues, selection, selectionArgs);
+            case PRODUCT_ID:
+                selection = ProductEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateProduct(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Checks if there is anything to update, and if so, checks that all given data is valid and not null before
+     * updating a specific product using the given content values.
+     * Returns the number of rows affected
+     */
+    private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        if (values.containsKey(ProductEntry.COLUMN_PRODUCT_NAME)) {
+            String product_name = values.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
+            if (product_name == null) {
+                throw new IllegalArgumentException("Product requires a name");
+            }
+        }
+
+        if (values.containsKey(ProductEntry.COLUMN_PRODUCT_PRICE)){
+            int product_price = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_PRICE);
+            if (product_price < 0) {
+                throw new IllegalArgumentException("Product requires a valid price");
+            }
+        }
+
+        if (values.containsKey(ProductEntry.COLUMN_PRODUCT_QUANTITY)) {
+            int product_quantity = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+            if (product_quantity < 0) {
+                throw new IllegalArgumentException("Product requires a valid quantity");
+            }
+        }
+
+        if (values.containsKey(ProductEntry.COLUMN_SUPPLIER_NAME)) {
+            String supplier_name = values.getAsString(ProductEntry.COLUMN_SUPPLIER_NAME);
+            if (supplier_name == null) {
+                throw new IllegalArgumentException("Product requires a supplier name");
+            }
+        }
+
+        if (values.containsKey(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER)) {
+            String supplier_number = values.getAsString(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            if (supplier_number == null) {
+                throw new IllegalArgumentException("Product requires a supplier phone number");
+            }
+        }
+
+        SQLiteDatabase database = productDbHelper.getWritableDatabase();
+        int updatedRows = database.update(ProductEntry.TABLE_NAME, values, selection, selectionArgs);
+        if (updatedRows != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return updatedRows;
     }
 
     /**

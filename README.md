@@ -34,4 +34,4 @@ Check lists are derived from the project rubrics created by Udacity.
 - [ ] Empty view should be a TextView with instructions on how to add items to the database
 - [x] Add Product Button
 
-- [ ] Data validation to make sure no null (or invalid) values are accepted while adding or updating inventory
+- [x] Data validation to make sure no null (or invalid) values are accepted while adding or updating inventory

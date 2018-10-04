@@ -100,13 +100,24 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
         values.put(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierNumber);
 
-        Uri insertedProduct = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        if (currentProductUri == null) {
+            Uri insertedProduct = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
 
-        if (insertedProduct == null) {
-            Toast.makeText(this, R.string.saving_product_error, Toast.LENGTH_SHORT).show();
+            if (insertedProduct == null) {
+                Toast.makeText(this, R.string.saving_product_error, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.saving_product_success, Toast.LENGTH_SHORT).show();
+                finish();
+            }
         } else {
-            Toast.makeText(this, R.string.saving_product_success, Toast.LENGTH_SHORT).show();
-            finish();
+            int updatedRows = getContentResolver().update(currentProductUri, values, null, null);
+
+            if (updatedRows == 0) {
+                Toast.makeText(this, R.string.updating_product_error, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.updating_product_success, Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
 

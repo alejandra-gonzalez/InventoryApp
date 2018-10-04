@@ -25,4 +25,6 @@
     <string name="saving_product_success">Successfully saved product</string>
     <string name="activity_title_add_new_product">Add New Product</string>
     <string name="activity_title_edit_product">Edit Product</string>
+    <string name="updating_product_error">Error with editing product</string>
+    <string name="updating_product_success">Successfully updated product</string>
 </resources>

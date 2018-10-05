@@ -27,4 +27,7 @@
     <string name="activity_title_edit_product">Edit Product</string>
     <string name="updating_product_error">Error with editing product</string>
     <string name="updating_product_success">Successfully updated product</string>
+    <string name="out_of_stock_error">Product out of stock</string>
+    <string name="sold_successfully">Product sold successfully</string>
+    <string name="sold_unsuccessfully">Error with selling product</string>
 </resources>

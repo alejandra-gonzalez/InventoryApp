@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         ListView productList = findViewById(R.id.product_list);
+        View emptyView = findViewById(R.id.no_inventory);
+
+        productList.setEmptyView(emptyView);
         productCursorAdapter = new ProductCursorAdapter(this, null);
         productList.setAdapter(productCursorAdapter);
 

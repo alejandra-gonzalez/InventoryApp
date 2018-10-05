@@ -7,20 +7,18 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/product_inventory"
-        android:textColor="#272727"
-        android:textSize="36sp" />
-
     <ListView
         android:id="@+id/product_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <!-- For Empty View -->
+    
+    <TextView
+        android:id="@+id/no_inventory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_inventory"/>
 
 
 </LinearLayout>

@@ -44,8 +44,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if (currentProductUri == null) {
             setTitle(R.string.activity_title_add_new_product);
-            // Invalidate the options menu, so the "Delete" menu option can be hidden.
-            // (It doesn't make sense to delete a pet that hasn't been created yet.)
             invalidateOptionsMenu();
         } else {
             setTitle(R.string.activity_title_edit_product);

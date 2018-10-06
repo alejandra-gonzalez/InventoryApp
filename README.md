@@ -21,7 +21,7 @@ Check lists are derived from the project rubrics created by Udacity.
 
 # Stage 2 Check List
 
-- [ ] The following features: Add Inventory, View Product Details, Edit Product Details, List of All Inventory
+- [x] The following features: Add Inventory, View Product Details, Edit Product Details, List of All Inventory
 - [x] Use of Navigation Drawer, View Pager, Up/Back Navigation, or Intents to navigate between activities or fragments
 
 - [x] Main Activity contains List of All Inventory

@@ -30,6 +30,6 @@
     <string name="out_of_stock_error">Product out of stock</string>
     <string name="sold_successfully">Product sold successfully</string>
     <string name="sold_unsuccessfully">Error with selling product</string>
-    <string name="no_inventory">No items in inventory. \n Add an item using the options in the
-        overflow menu above.</string>
+    <string name="no_inventory">No items in inventory. \nGet started by adding a product\nusing
+        the icon below.</string>
 </resources>

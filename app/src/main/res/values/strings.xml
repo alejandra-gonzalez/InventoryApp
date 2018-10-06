@@ -9,7 +9,7 @@
     <string name="quantity_label">Quantity: </string>
     <string name="sale_button_text">Sell</string>
     <string name="insert_dummy_data">Insert Dummy Data</string>
-    <string name="insert_new_product">Insert New Product</string>
+    <string name="delete_all_items">Clear Inventory</string>
     <string name="editor_hint_product_name">Product Name</string>
     <string name="editor_hint_product_price">Price</string>
     <string name="editor_hint_product_quantity">Quantity Available</string>
@@ -27,6 +27,8 @@
     <string name="activity_title_edit_product">Edit Product</string>
     <string name="updating_product_error">Error with editing product</string>
     <string name="updating_product_success">Successfully updated product</string>
+    <string name="clear_inventory_error">Error with clearing inventory</string>
+    <string name="clear_inventory_success">Inventory clearing successful</string>
     <string name="out_of_stock_error">Product out of stock</string>
     <string name="sold_successfully">Product sold successfully</string>
     <string name="sold_unsuccessfully">Error with selling product</string>

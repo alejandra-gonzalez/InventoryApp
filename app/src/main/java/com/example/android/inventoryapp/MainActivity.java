@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
 
@@ -122,11 +123,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.action_insert_dummy_data:
                 insertProductData();
                 return true;
-            case R.id.action_insert_new_product:
-                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-                startActivity(intent);
+            case R.id.action_delete_all_items:
+                deleteAll();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Delete all products in the database.
+     */
+    private void deleteAll() {
+        int deletedRows = getContentResolver().delete(ProductEntry.CONTENT_URI, null, null);
+        if (deletedRows == 0) {
+            Toast.makeText(this, R.string.clear_inventory_error, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.clear_inventory_success, Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -8,8 +8,8 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_insert_new_product"
-        android:title="@string/insert_new_product"
+        android:id="@+id/action_delete_all_items"
+        android:title="@string/delete_all_items"
         app:showAsAction="never" />
 
 </menu>

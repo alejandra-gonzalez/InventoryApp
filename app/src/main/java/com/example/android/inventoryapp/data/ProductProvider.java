@@ -79,11 +79,32 @@ public class ProductProvider extends ContentProvider {
     }
 
     /**
-     * Delete the data at the given URI. Returns the number of rows affected
+     * Delete the data at the given URI.
      */
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
+        SQLiteDatabase database = productDbHelper.getWritableDatabase();
+
+        final int match = sUriMatcher.match(uri);
+        int deletedRows;
+        switch (match) {
+            case INVENTORY:
+                deletedRows = database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case PRODUCT_ID:
+                selection = ProductEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                deletedRows = database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+        if (deletedRows != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return deletedRows;
     }
 
     /**

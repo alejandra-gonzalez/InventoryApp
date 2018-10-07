@@ -4,4 +4,6 @@
     <dimen name="product_name">24sp</dimen>
     <dimen name="layout_margin">16dp</dimen>
     <dimen name="empty_view_text">16sp</dimen>
+    <dimen name="view_product_name">30sp</dimen>
+    <dimen name="view_text">18sp</dimen>
 </resources>

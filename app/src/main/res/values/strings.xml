@@ -7,6 +7,8 @@
     <string name="sample_supplier_number">(123) 456-7890</string>
     <string name="price_label">Price: </string>
     <string name="quantity_label">Quantity: </string>
+    <string name="supplier_name_label">Supplier: </string>
+    <string name="supplier_number_label">Phone: </string>
     <string name="sale_button_text">Sell</string>
     <string name="insert_dummy_data">Insert Dummy Data</string>
     <string name="delete_all_items">Clear Inventory</string>
@@ -34,4 +36,10 @@
     <string name="sold_unsuccessfully">Error with selling product</string>
     <string name="no_inventory">No items in inventory. \nGet started by adding a product\nusing
         the icon below.</string>
+    <string name="view_product_activity_label">Product Details</string>
+    <string name="increase_quantity">+ 1</string>
+    <string name="decrease_quantity">- 1</string>
+    <string name="contact_supplier">Call</string>
+    <string name="edit_product_label">Edit This Product</string>
+    <string name="delete_product_label">Delete This Product</string>
 </resources>

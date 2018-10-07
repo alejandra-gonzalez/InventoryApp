@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewProductActivity"
+    android:layout_margin="@dimen/layout_margin">
+
+    <TextView
+        android:id="@+id/product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:textSize="@dimen/view_product_name"
+        android:textStyle="bold"
+        tools:text="@string/sample_product_name"/>
+
+    <TextView
+        android:textSize="@dimen/view_text"
+        android:id="@+id/price_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_name"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_marginEnd="@dimen/list_item_spacing"
+        android:layout_marginRight="@dimen/list_item_spacing"
+        android:fontFamily="serif"
+        android:text="@string/price_label"
+        android:textStyle="bold" />
+
+    <TextView
+        android:textSize="@dimen/view_text"
+        android:id="@+id/product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_name"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_toEndOf="@id/price_label"
+        android:layout_toRightOf="@id/price_label"
+        tools:text="12" />
+
+    <TextView
+        android:textSize="@dimen/view_text"
+        android:id="@+id/quantity_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_price"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_marginEnd="@dimen/list_item_spacing"
+        android:layout_marginRight="@dimen/list_item_spacing"
+        android:fontFamily="serif"
+        android:text="@string/quantity_label"
+        android:textStyle="bold" />
+
+    <TextView
+        android:textSize="@dimen/view_text"
+        android:id="@+id/product_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/product_price"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_toEndOf="@id/quantity_label"
+        android:layout_toRightOf="@id/quantity_label"
+        tools:text="25" />
+
+    <Button
+        android:id="@+id/decrement_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/decrease_quantity"
+        android:layout_below="@id/product_quantity"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginRight="@dimen/layout_margin"/>
+
+    <Button
+        android:id="@+id/increment_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/increase_quantity"
+        android:layout_below="@id/product_quantity"
+        android:layout_toRightOf="@id/decrement_quantity"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_marginEnd="@dimen/layout_margin"
+        android:layout_marginRight="@dimen/layout_margin"/>
+
+    <TextView
+        android:textSize="@dimen/view_text"
+        android:id="@+id/supplier_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/decrement_quantity"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_marginEnd="@dimen/list_item_spacing"
+        android:layout_marginRight="@dimen/list_item_spacing"
+        android:fontFamily="serif"
+        android:text="@string/supplier_name_label"
+        android:textStyle="bold" />
+
+    <TextView
+        android:textSize="@dimen/view_text"
+        android:id="@+id/supplier_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/decrement_quantity"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_toEndOf="@id/supplier_name_label"
+        android:layout_toRightOf="@id/supplier_name_label"
+        tools:text="@string/sample_supplier_name" />
+
+    <TextView
+        android:textSize="@dimen/view_text"
+        android:id="@+id/supplier_number_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/supplier_name_label"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_marginEnd="@dimen/list_item_spacing"
+        android:layout_marginRight="@dimen/list_item_spacing"
+        android:fontFamily="serif"
+        android:text="@string/supplier_number_label"
+        android:textStyle="bold" />
+
+    <TextView
+        android:textSize="@dimen/view_text"
+        android:id="@+id/supplier_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/supplier_name_label"
+        android:layout_marginBottom="@dimen/list_item_spacing"
+        android:layout_toEndOf="@id/supplier_number_label"
+        android:layout_toRightOf="@id/supplier_number_label"
+        tools:text="@string/sample_supplier_number" />
+
+    <Button
+        android:id="@+id/dial_supplier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/supplier_number_label"
+        android:text="@string/contact_supplier"/>
+
+</RelativeLayout>

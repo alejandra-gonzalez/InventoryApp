@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                Intent intent = new Intent(MainActivity.this, ViewProductActivity.class);
                 Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, l);
                 intent.setData(currentProductUri);
                 Log.i("MAINACTIVITY", "URI BEING PASSED = " + l);

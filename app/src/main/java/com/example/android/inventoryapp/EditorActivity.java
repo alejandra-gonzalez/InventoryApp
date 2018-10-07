@@ -1,23 +1,20 @@
 package com.example.android.inventoryapp;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
 
-public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class EditorActivity extends AppCompatActivity {
 
     private EditText getProductName;
     private EditText getProductPrice;
@@ -25,8 +22,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText getSupplierName;
     private EditText getSupplierNumber;
 
-    private static final int EDIT_PRODUCT_LOADER = 1;
-    private Uri currentProductUri;
+
+    private long productId = -1;
+    private String productName;
+    private String productPrice;
+    private String productQuantity;
+    private String supplierName;
+    private String supplierNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +42,25 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         getSupplierNumber = findViewById(R.id.supplier_phone_number);
 
         Intent intent = getIntent();
-        currentProductUri = intent.getData();
+        Bundle productData = intent.getExtras();
 
-        if (currentProductUri == null) {
+        if (productData == null) {
             setTitle(R.string.activity_title_add_new_product);
             invalidateOptionsMenu();
         } else {
             setTitle(R.string.activity_title_edit_product);
-            getSupportLoaderManager().initLoader(EDIT_PRODUCT_LOADER, null, this);
+            productId = productData.getLong(ProductEntry._ID);
+            productName = productData.getString(ProductEntry.COLUMN_PRODUCT_NAME);
+            productPrice = productData.getString(ProductEntry.COLUMN_PRODUCT_PRICE);
+            productQuantity = productData.getString(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+            supplierName = productData.getString(ProductEntry.COLUMN_SUPPLIER_NAME);
+            supplierNumber = productData.getString(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+
+            getProductName.setText(productName);
+            getProductPrice.setText(productPrice);
+            getProductQuantity.setText(productQuantity);
+            getSupplierName.setText(supplierName);
+            getSupplierNumber.setText(supplierNumber);
         }
     }
 
@@ -56,12 +69,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * adding it to the database.
      */
     public void saveProduct(View v){
-        String productName = getProductName.getText().toString().trim();
+        productName = getProductName.getText().toString().trim();
         String productPriceString = getProductPrice.getText().toString().trim();
         String productQuantityString = getProductQuantity.getText().toString().trim();
-        String supplierName = getSupplierName.getText().toString().trim();
-        String supplierNumber = getSupplierNumber.getText().toString().trim();
-        int productQuantity = 0;
+        supplierName = getSupplierName.getText().toString().trim();
+        supplierNumber = getSupplierNumber.getText().toString().trim();
+        int productQuantityInt = 0;
+
 
         if (TextUtils.isEmpty(productName)){
             Toast.makeText(this, R.string.no_product_name, Toast.LENGTH_SHORT).show();
@@ -78,83 +92,74 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
 
         if (!TextUtils.isEmpty(productQuantityString)){
-            productQuantity = Integer.parseInt(productQuantityString);
-            if (productQuantity < 0) {
+            productQuantityInt = Integer.parseInt(productQuantityString);
+            if (productQuantityInt < 0) {
                 Toast.makeText(this, R.string.no_product_quantity, Toast.LENGTH_SHORT).show();
                 return;
             }
         }
 
-        int productPrice = Integer.parseInt(productPriceString);
-        if (productPrice < 0) {
+        int productPriceInt = Integer.parseInt(productPriceString);
+        if (productPriceInt < 0) {
             Toast.makeText(this, R.string.no_product_price, Toast.LENGTH_SHORT).show();
             return;
         }
 
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, productName);
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, productPrice);
-        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
+        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, productPriceInt);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantityInt);
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
         values.put(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierNumber);
 
-        if (currentProductUri == null) {
+        if (productId == -1) {
             Uri insertedProduct = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
 
             if (insertedProduct == null) {
                 Toast.makeText(this, R.string.saving_product_error, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, R.string.saving_product_success, Toast.LENGTH_SHORT).show();
+                returnData();
                 finish();
             }
         } else {
+            Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productId);
+
             int updatedRows = getContentResolver().update(currentProductUri, values, null, null);
 
             if (updatedRows == 0) {
                 Toast.makeText(this, R.string.updating_product_error, Toast.LENGTH_SHORT).show();
             } else {
+                productQuantity = String.valueOf(productQuantityInt);
+                productPrice = String.valueOf(productPrice);
                 Toast.makeText(this, R.string.updating_product_success, Toast.LENGTH_SHORT).show();
+                returnData();
                 finish();
             }
         }
     }
 
     /**
-     * Creates the loader to show product details if it was not created already.
+     * Returns data to ViewActivity via Intent.
      */
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this, currentProductUri, null, null,
-                null, null);
+    private void returnData(){
+        Intent productData = new Intent();
+        productData.putExtra(ProductEntry._ID, productId);
+        productData.putExtra(ProductEntry.COLUMN_PRODUCT_NAME, productName);
+        productData.putExtra(ProductEntry.COLUMN_PRODUCT_PRICE, productPrice);
+        productData.putExtra(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
+        productData.putExtra(ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
+        productData.putExtra(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierNumber);
+        setResult(RESULT_OK, productData);
     }
 
-    /**
-     * After the loader is finished, bind current product data to its corresponding EditText.
-     */
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        if (data == null || data.getCount() < 1){
-            return;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                returnData();
+                finish();
+                return true;
         }
-
-        data.moveToFirst();
-        getProductName.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME)));
-        getProductPrice.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE)));
-        getProductQuantity.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY)));
-        getSupplierName.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_NAME)));
-        getSupplierNumber.setText(data.getString(data.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER)));
-    }
-
-    /**
-     * Reset the data bound to the EditTexts if the loader is reset.
-     */
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        getProductName.setText("");
-        getProductPrice.setText("");
-        getProductQuantity.setText("");
-        getSupplierName.setText("");
-        getSupplierNumber.setText("");
+        return super.onOptionsItemSelected(item);
     }
 }

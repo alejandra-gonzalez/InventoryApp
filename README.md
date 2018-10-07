@@ -28,7 +28,7 @@ Check lists are derived from the project rubrics created by Udacity.
 - [x] List item contains product name, price, quantity, sale button to reduce product quantity by one
 
 - [x] Product Details layout displays product name, price, quanitity, supplier name, and supplier phone number stored in database
-- [ ] Product Details layout contains buttons to increase and decrease available quantity
+- [x] Product Details layout contains buttons to increase and decrease available quantity
 - [ ] Product Details layout contains button to order from supplier. This button should have an intent to a phone app to dial the supplier phone number from the database
 
 - [x] Empty view should be a TextView with instructions on how to add items to the database

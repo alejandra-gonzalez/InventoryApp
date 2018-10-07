@@ -1,5 +1,7 @@
 package com.example.android.inventoryapp;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,7 +14,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
 
 public class ViewProductActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
@@ -22,6 +28,9 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
     private TextView productQuantityView;
     private TextView supplierNameView;
     private TextView supplierNumberView;
+
+    private Button increment;
+    private Button decrement;
 
     private long productId;
     private String productName;
@@ -44,6 +53,9 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
         supplierNameView = findViewById(R.id.supplier_name);
         supplierNumberView = findViewById(R.id.supplier_number);
 
+        increment = findViewById(R.id.increment_quantity);
+        decrement = findViewById(R.id.decrement_quantity);
+
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             currentProductUri = intent.getData();
@@ -55,9 +67,54 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
             productQuantity = savedInstanceState.getString(ProductEntry.COLUMN_PRODUCT_QUANTITY);
             supplierName = savedInstanceState.getString(ProductEntry.COLUMN_SUPPLIER_NAME);
             supplierNumber = savedInstanceState.getString(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productId);
 
             bindData();
         }
+
+        increment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                productQuantity = String.valueOf(Integer.parseInt(productQuantity) + 1);
+                ContentValues values = new ContentValues();
+                values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
+                int rowsUpdated = getContentResolver().update(
+                        currentProductUri,
+                        values,
+                        null,
+                        null);
+                if (rowsUpdated == 1) {
+                    productQuantityView.setText(productQuantity);
+                } else {
+                    Toast.makeText(ViewProductActivity.this, R.string.increase_quantity_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        decrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Integer.parseInt(productQuantity) >= 1) {
+                    productQuantity = String.valueOf(Integer.parseInt(productQuantity) - 1);
+                    ContentValues values = new ContentValues();
+                    values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
+                    int rowsUpdated = getContentResolver().update(
+                            currentProductUri,
+                            values,
+                            null,
+                            null);
+                    if (rowsUpdated == 1) {
+                        productQuantityView.setText(productQuantity);
+                    } else {
+                        Toast.makeText(ViewProductActivity.this, R.string.decrease_quantity_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                if (Integer.parseInt(productQuantity) == 0) {
+                    Toast.makeText(ViewProductActivity.this, R.string.out_of_stock_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     /**

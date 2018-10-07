@@ -42,4 +42,6 @@
     <string name="contact_supplier">Call</string>
     <string name="edit_product_label">Edit This Product</string>
     <string name="delete_product_label">Delete This Product</string>
+    <string name="increase_quantity_error">Error with increasing quantity</string>
+    <string name="decrease_quantity_error">Error with decreasing quantity</string>
 </resources>

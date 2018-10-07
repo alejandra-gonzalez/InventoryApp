@@ -153,6 +153,9 @@ public class EditorActivity extends AppCompatActivity {
         setResult(RESULT_OK, productData);
     }
 
+    /**
+     * Sends back data to ViewActivity when up button is pressed
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

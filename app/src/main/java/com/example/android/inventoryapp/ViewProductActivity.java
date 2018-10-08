@@ -266,7 +266,6 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
             }
         });
 
-        // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

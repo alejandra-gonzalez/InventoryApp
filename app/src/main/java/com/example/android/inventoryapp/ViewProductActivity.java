@@ -1,6 +1,7 @@
 package com.example.android.inventoryapp;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -146,14 +148,7 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
                 startActivityForResult(intent, 101);
                 return true;
             case R.id.action_delete_product:
-                int deletedRows = getContentResolver().delete(currentProductUri, null, null);
-
-                if (deletedRows == 0) {
-                    Toast.makeText(this, R.string.delete_product_error, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, R.string.delete_product_success, Toast.LENGTH_SHORT).show();
-                }
-                finish();
+                confirmDeleteProductDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -234,5 +229,45 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
                 getSupportLoaderManager().initLoader(EDIT_PRODUCT_LOADER, null, this);
             }
         }
+    }
+
+    /**
+     * Deletes the product that is currently displayed.
+     */
+
+    private void deleteProduct(){
+        int deletedRows = getContentResolver().delete(currentProductUri, null, null);
+
+        if (deletedRows == 0) {
+            Toast.makeText(this, R.string.delete_product_error, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.delete_product_success, Toast.LENGTH_SHORT).show();
+        }
+        finish();
+    }
+
+    /**
+     * Displays a dialog window confirming if user wants to delete the product.
+     * If "Delete Product" is pressed, then the product is deleted.
+     */
+    private void confirmDeleteProductDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_delete_product_message);
+        builder.setPositiveButton(R.string.delete_product_label, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteProduct();
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_cancel_delete_product, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

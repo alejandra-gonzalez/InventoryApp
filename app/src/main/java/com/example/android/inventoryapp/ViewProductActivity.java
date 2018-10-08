@@ -29,9 +29,6 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
     private TextView supplierNameView;
     private TextView supplierNumberView;
 
-    private Button increment;
-    private Button decrement;
-
     private long productId;
     private String productName;
     private String productPrice;
@@ -53,8 +50,9 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
         supplierNameView = findViewById(R.id.supplier_name);
         supplierNumberView = findViewById(R.id.supplier_number);
 
-        increment = findViewById(R.id.increment_quantity);
-        decrement = findViewById(R.id.decrement_quantity);
+        Button increment = findViewById(R.id.increment_quantity);
+        Button decrement = findViewById(R.id.decrement_quantity);
+        Button callSupplier = findViewById(R.id.dial_supplier);
 
         if (savedInstanceState == null) {
             Intent intent = getIntent();
@@ -113,6 +111,15 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
                 if (Integer.parseInt(productQuantity) == 0) {
                     Toast.makeText(ViewProductActivity.this, R.string.out_of_stock_error, Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        callSupplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" +supplierNumber));
+                startActivity(intent);
             }
         });
     }

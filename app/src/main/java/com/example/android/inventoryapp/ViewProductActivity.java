@@ -153,7 +153,14 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
                 startActivityForResult(intent, 101);
                 return true;
             case R.id.action_delete_product:
-                //for now just delete the product
+                int deletedRows = getContentResolver().delete(currentProductUri, null, null);
+
+                if (deletedRows == 0) {
+                    Toast.makeText(this, R.string.delete_product_error, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, R.string.delete_product_success, Toast.LENGTH_SHORT).show();
+                }
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);

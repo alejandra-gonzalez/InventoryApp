@@ -44,4 +44,6 @@
     <string name="delete_product_label">Delete This Product</string>
     <string name="increase_quantity_error">Error with increasing quantity</string>
     <string name="decrease_quantity_error">Error with decreasing quantity</string>
+    <string name="delete_product_error">Error with deleting product</string>
+    <string name="delete_product_success">Successfully deleted product</string>
 </resources>

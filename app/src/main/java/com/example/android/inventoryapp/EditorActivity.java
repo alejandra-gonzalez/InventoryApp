@@ -74,14 +74,15 @@ public class EditorActivity extends AppCompatActivity {
         String productQuantityString = getProductQuantity.getText().toString().trim();
         supplierName = getSupplierName.getText().toString().trim();
         supplierNumber = getSupplierNumber.getText().toString().trim();
-        int productQuantityInt = 0;
-
 
         if (TextUtils.isEmpty(productName)){
             Toast.makeText(this, R.string.no_product_name, Toast.LENGTH_SHORT).show();
             return;
-        } else if (TextUtils.isEmpty(productPriceString)){
+        } else if (TextUtils.isEmpty(productPriceString)) {
             Toast.makeText(this, R.string.no_product_price, Toast.LENGTH_SHORT).show();
+            return;
+        } else if (TextUtils.isEmpty(productQuantityString)){
+            Toast.makeText(this, R.string.no_product_quantity, Toast.LENGTH_SHORT).show();
             return;
         } else if (TextUtils.isEmpty(supplierName)) {
             Toast.makeText(this, R.string.no_supplier_name, Toast.LENGTH_SHORT).show();
@@ -91,17 +92,15 @@ public class EditorActivity extends AppCompatActivity {
             return;
         }
 
-        if (!TextUtils.isEmpty(productQuantityString)){
-            productQuantityInt = Integer.parseInt(productQuantityString);
-            if (productQuantityInt < 0) {
-                Toast.makeText(this, R.string.no_product_quantity, Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
         int productPriceInt = Integer.parseInt(productPriceString);
         if (productPriceInt < 0) {
             Toast.makeText(this, R.string.no_product_price, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int productQuantityInt = Integer.parseInt(productQuantityString);
+        if (productQuantityInt < 0) {
+            Toast.makeText(this, R.string.no_product_quantity, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -144,12 +143,8 @@ public class EditorActivity extends AppCompatActivity {
      */
     private void returnData(){
         Intent productData = new Intent();
-        productData.putExtra(ProductEntry._ID, productId);
-        productData.putExtra(ProductEntry.COLUMN_PRODUCT_NAME, productName);
-        productData.putExtra(ProductEntry.COLUMN_PRODUCT_PRICE, productPrice);
-        productData.putExtra(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
-        productData.putExtra(ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
-        productData.putExtra(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierNumber);
+        Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productId);
+        productData.setData(currentProductUri);
         setResult(RESULT_OK, productData);
     }
 

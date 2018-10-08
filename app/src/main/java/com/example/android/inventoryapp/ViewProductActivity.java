@@ -1,6 +1,5 @@
 package com.example.android.inventoryapp;
 
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,6 +37,7 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
 
     private static final int EDIT_PRODUCT_LOADER = 1;
     private Uri currentProductUri;
+    private String uri_bundle_key = "uri";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +59,8 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
             currentProductUri = intent.getData();
             getSupportLoaderManager().initLoader(EDIT_PRODUCT_LOADER, null, this);
         } else {
-            productId = savedInstanceState.getLong(ProductEntry._ID);
-            productName = savedInstanceState.getString(ProductEntry.COLUMN_PRODUCT_NAME);
-            productPrice = savedInstanceState.getString(ProductEntry.COLUMN_PRODUCT_PRICE);
-            productQuantity = savedInstanceState.getString(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-            supplierName = savedInstanceState.getString(ProductEntry.COLUMN_SUPPLIER_NAME);
-            supplierNumber = savedInstanceState.getString(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-            currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productId);
-
-            bindData();
+            currentProductUri = Uri.parse(savedInstanceState.getString(uri_bundle_key));
+            getSupportLoaderManager().initLoader(EDIT_PRODUCT_LOADER, null, this);
         }
 
         increment.setOnClickListener(new View.OnClickListener() {
@@ -210,34 +203,12 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
     }
 
     /**
-     * Restores data when orientation changes
-     */
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        productId = savedInstanceState.getLong(ProductEntry._ID);
-        productName = savedInstanceState.getString(ProductEntry.COLUMN_PRODUCT_NAME);
-        productPrice = savedInstanceState.getString(ProductEntry.COLUMN_PRODUCT_PRICE);
-        productQuantity = savedInstanceState.getString(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-        supplierName = savedInstanceState.getString(ProductEntry.COLUMN_SUPPLIER_NAME);
-        supplierNumber = savedInstanceState.getString(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-
-        bindData();
-    }
-
-    /**
      * Saves data in case of orientation change
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(ProductEntry._ID, productId);
-        outState.putString(ProductEntry.COLUMN_PRODUCT_NAME, productName);
-        outState.putString(ProductEntry.COLUMN_PRODUCT_PRICE, productPrice);
-        outState.putString(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
-        outState.putString(ProductEntry.COLUMN_SUPPLIER_NAME, supplierName);
-        outState.putString(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierNumber);
+        outState.putString(uri_bundle_key, currentProductUri.toString());
     }
 
     /**
@@ -258,14 +229,9 @@ public class ViewProductActivity extends AppCompatActivity implements LoaderMana
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == RESULT_OK) {
-                productId = data.getLongExtra(ProductEntry._ID, -1);
-                productName = data.getStringExtra(ProductEntry.COLUMN_PRODUCT_NAME);
-                productPrice = data.getStringExtra(ProductEntry.COLUMN_PRODUCT_PRICE);
-                productQuantity = data.getStringExtra(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-                supplierName = data.getStringExtra(ProductEntry.COLUMN_SUPPLIER_NAME);
-                supplierNumber = data.getStringExtra(ProductEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-
-                bindData();
+                Intent intent = getIntent();
+                currentProductUri = intent.getData();
+                getSupportLoaderManager().initLoader(EDIT_PRODUCT_LOADER, null, this);
             }
         }
     }
